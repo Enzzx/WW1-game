@@ -24,12 +24,12 @@ void resizeBg(char *path, ALLEGRO_BITMAP *background, int width, int height) {
 }
 
 
-bool fadeState(float *visibility, bool closing, int fps) {
+bool fadeState(float *visibility, bool closing, float fps) {
     printf("entrou em fadestate\n");
     if (closing == true)
-        *visibility -= 0.1;
+        *visibility -= 1/fps;
     else if (*visibility < 1)
-        *visibility += 0.1;
+        *visibility += 1/fps;
     
     if (*visibility <= 0.001 && closing == true)
         return true;

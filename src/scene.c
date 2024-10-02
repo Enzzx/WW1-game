@@ -13,7 +13,7 @@
 
 void createScenes (Scene *arr) {
     FILE *file;
-    char line[1000];
+    char line[1024];
 
     file = fopen("../assets/scenes.txt", "r");
 

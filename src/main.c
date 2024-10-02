@@ -21,8 +21,8 @@ typedef enum {
 
 int WIDTH = 700;
 int HEIGHT = 450;
-float FPS = 5;
-Scene scenesArr[2];
+float FPS = 30;
+Scene scenesArr[9];
 int indeXcene = 0;
 GAMESTATE stateCurrent = STATE_MENU;
 bool redraw = true;
