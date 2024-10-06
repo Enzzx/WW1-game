@@ -1,8 +1,15 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-void resizeBg(char *path, ALLEGRO_BITMAP *background, int width, int height);
+typedef enum {
+    STATE_MENU,
+    STATE_SCENE,
+    STATE_LEVEL,
+    STATE_GAMEOVER,
+    STATE_PAUSE
+} GAMESTATE;
 
+void resizeBg(char *path, ALLEGRO_BITMAP *background, int width, int height);
 bool fadeState(float *visibility, bool closing, float fps);
 
 #endif

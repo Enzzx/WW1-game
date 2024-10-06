@@ -5,7 +5,6 @@
 typedef struct {
     char *imgPath;
     char *text;
-    float shiftX;
     float visibility;
     bool closing;
 } Scene;

@@ -1,13 +1,8 @@
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_image.h>
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_ttf.h>
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_acodec.h>
-#include <allegro5/allegro_primitives.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include "../include/gamestate.h"
+#include "libs.h"
+#include "gamestate.h"
+
+extern int WIDTH;
+extern int HEIGHT;
 
 void resizeBg(char *path, ALLEGRO_BITMAP *background, int width, int height) {
     ALLEGRO_BITMAP *defaultBg = al_load_bitmap(path);
@@ -25,12 +20,13 @@ void resizeBg(char *path, ALLEGRO_BITMAP *background, int width, int height) {
 
 
 bool fadeState(float *visibility, bool closing, float fps) {
-    printf("entrou em fadestate\n");
     if (closing == true)
-        *visibility -= 1/fps;
+        *visibility -= (1/fps)*0.7;
     else if (*visibility < 1)
-        *visibility += 1/fps;
+        *visibility += (1/fps)*0.7;
     
+    al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1-*visibility));
+
     if (*visibility <= 0.001 && closing == true)
         return true;
     return false;
