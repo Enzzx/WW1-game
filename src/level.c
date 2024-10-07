@@ -24,10 +24,10 @@ void createLevels (Stage *arr) {
         arr[i].ingame = false;
         arr[i].closing = false;
 
-        printf("level: %d\tafterscene: %d\nmap path:%s\nprologo: %s\nepilogo: %s\n\n", arr[i].level, arr[i].afterScene, arr[i].mapPath, arr[i].prologue, arr[i].epilogue);
+        /* printf("level: %d\tafterscene: %d\nmap path:%s\nprologo: %s\nepilogo: %s\n\n", arr[i].level, arr[i].afterScene, arr[i].mapPath, arr[i].prologue, arr[i].epilogue); */
 
         lvl++;
-        afterScene += 2;
+        afterScene ++;
         i++;
 
     }

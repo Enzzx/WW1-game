@@ -4,9 +4,9 @@
 #include "level.h"
 
 
-int WIDTH = 700;
-int HEIGHT = 450;
-float FPS = 30;
+int WIDTH = 750;
+int HEIGHT = 500;
+float FPS = 10;
 GAMESTATE stateCurrent = STATE_MENU;
 Scene scenesArr[9];
 Stage stagesArr[5];
@@ -36,7 +36,7 @@ int main()
     createScenes(scenesArr);
     createLevels(stagesArr);
 
-    resizeBg("../assets/menu.jpeg", background, WIDTH, HEIGHT);
+    resizeBg("../assets/menu.jpg", background, WIDTH, HEIGHT);
 
     while (1) {
         al_wait_for_event(queue, &event);
@@ -59,7 +59,7 @@ int main()
 
             case STATE_SCENE:
                 al_draw_bitmap(background, 0, 0, 0);
-                al_draw_text(font, al_map_rgb(255, 255, 255), WIDTH/2, 0, ALLEGRO_ALIGN_CENTRE, scenesArr[indeXcene].text);
+                al_draw_text(font, al_map_rgb(0, 0, 0), WIDTH/2, 0, ALLEGRO_ALIGN_CENTRE, scenesArr[indeXcene].text);
                 
                 if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode ==
                  ALLEGRO_KEY_RIGHT && scenesArr[indeXcene].visibility >= 1.0)
@@ -67,28 +67,31 @@ int main()
                 break;
 
             case STATE_LEVEL:
-                if (redraw) {
                     if(!(stagesArr[indeXtage].ingame || stagesArr[indeXtage].closing)) { // PRÓLOGO
-                        if (!(stagesArr[indeXtage].opened) && stagesArr[indeXtage].visibility < 1) {
-                            fadeState(&stagesArr[indeXtage].visibility, false, FPS);
-                        } else if (stagesArr[indeXtage].opened) {
-                            if(fadeState(&stagesArr[indeXtage].visibility, true, FPS))
-                                stagesArr[indeXtage].opened = false;
-                                stagesArr[indeXtage].ingame = true;
-                        }
-
                         al_draw_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgb(0, 0, 0), 0);
                         al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, stagesArr[indeXtage].prologue);
 
+                        if (!(stagesArr[indeXtage].opened) && stagesArr[indeXtage].visibility < 1 && redraw)
+                            fadeState(&stagesArr[indeXtage].visibility, false, FPS);
+                        else if (stagesArr[indeXtage].opened && redraw) {
+                            if(fadeState(&stagesArr[indeXtage].visibility, true, FPS)) {
+                                stagesArr[indeXtage].opened = false;
+                                stagesArr[indeXtage].ingame = true;
+                            }
+                        }
+
                         if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode ==  ALLEGRO_KEY_RIGHT)
-                            stagesArr[indeXtage].opened = true;;
+                            stagesArr[indeXtage].opened = true;
 
                     } else if (stagesArr[indeXtage].ingame) { // JOGO
-                        if (!(stagesArr[indeXtage].opened)) {
+                        al_draw_bitmap(background, 0, 0, 0);
+                        // CHAMADA DO JOGO
+
+                        if (!(stagesArr[indeXtage].opened) && redraw) {
                             fadeState(&stagesArr[indeXtage].visibility, false, FPS);
                             if (stagesArr[indeXtage].visibility >= 1)
                                 stagesArr[indeXtage].opened = true;
-                        } else if (stagesArr[indeXtage].opened && stagesArr[indeXtage].visibility < 1) {
+                        } else if (stagesArr[indeXtage].opened && stagesArr[indeXtage].visibility < 1 && redraw) {
                             if (fadeState(&stagesArr[indeXtage].visibility, true, FPS)) {
                                 stagesArr[indeXtage].opened = false;
                                 stagesArr[indeXtage].ingame = false;
@@ -97,22 +100,21 @@ int main()
                         }
                         if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) 
                             stateCurrent = STATE_PAUSE;
-
-
-                        al_draw_bitmap(background, 0, 0, 0);
-                        // CHAMADA DO JOGO
+                        if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_RIGHT)
+                            stagesArr[indeXtage].visibility -= 0.1; 
                         // EVENTO PRA FADEOUT E MUDAR PRO EPILOGO
-                    } else if (stagesArr[indeXtage].closing) { // EPÍLOGO
-                        if (!(stagesArr[indeXtage].opened) && stagesArr[indeXtage].visibility < 1)
-                            fadeState(&stagesArr[indeXtage].visibility, false, FPS);
 
+                    } else if (stagesArr[indeXtage].closing) { // EPÍLOGO
                         al_draw_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgb(0, 0, 0), 0);
                         al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, stagesArr[indeXtage].epilogue);
+
+                        if (!(stagesArr[indeXtage].opened) && stagesArr[indeXtage].visibility < 1 && redraw)
+                            fadeState(&stagesArr[indeXtage].visibility, false, FPS);
+                        
 
                         if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_RIGHT)
                             stagesArr[indeXtage].opened = true;
                     }
-                }
                 break;
 
             case STATE_GAMEOVER:
@@ -139,6 +141,7 @@ int main()
         if (redraw && al_is_event_queue_empty(queue)) {
             if (stateCurrent == STATE_SCENE && (scenesArr[indeXcene].visibility != 1 || scenesArr[indeXcene].closing == true)) {
                 if (fadeState(&scenesArr[indeXcene].visibility, scenesArr[indeXcene].closing, FPS)) {
+                    printf("passa cena - %d\n", indeXcene);
                     indeXcene++;
                     if (indeXcene == stagesArr[indeXtage].afterScene) {
                         stateCurrent = STATE_LEVEL;
@@ -149,6 +152,7 @@ int main()
                 }
             } else if (stateCurrent == STATE_LEVEL && stagesArr[indeXtage].opened && stagesArr[indeXtage].closing) {
                 if (fadeState(&stagesArr[indeXtage].visibility, stagesArr[indeXtage].closing, FPS)) {
+                    printf("passa fase - %d\n", indeXcene);
                     indeXtage++;
                     resizeBg(scenesArr[indeXcene].imgPath, background, WIDTH, HEIGHT);
                     stateCurrent = STATE_SCENE;

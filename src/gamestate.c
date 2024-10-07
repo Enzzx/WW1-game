@@ -21,9 +21,9 @@ void resizeBg(char *path, ALLEGRO_BITMAP *background, int width, int height) {
 
 bool fadeState(float *visibility, bool closing, float fps) {
     if (closing == true)
-        *visibility -= (1/fps)*0.7;
+        *visibility -= (1/fps)*1.2;
     else if (*visibility < 1)
-        *visibility += (1/fps)*0.7;
+        *visibility += (1/fps)*1.2;
     
     al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1-*visibility));
 
