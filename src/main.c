@@ -3,10 +3,12 @@
 #include "gamestate.h"
 #include "level.h"
 
-
+//variáveis globais suadas em outros arquivos
 int WIDTH = 750;
 int HEIGHT = 500;
 float FPS = 10;
+ALLEGRO_FONT *font;
+
 GAMESTATE stateCurrent = STATE_MENU;
 Scene scenesArr[9];
 Stage stagesArr[5];
@@ -15,17 +17,18 @@ int indeXtage = 0;
 bool redraw = true;
 
 
-int main()
-{
+int main() {
+    //inicializando e registrando elementos do jogo
     al_init();
     al_install_keyboard();
     al_init_image_addon();
     al_init_primitives_addon();
+    al_init_ttf_addon();
 
     ALLEGRO_TIMER *fps = al_create_timer(1.0 / FPS);
     ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
     ALLEGRO_DISPLAY *display = al_create_display(WIDTH, HEIGHT);
-    ALLEGRO_FONT *font = al_create_builtin_font();
+    font = al_load_ttf_font("../assets/Roboto.ttf", 16, 0);
     ALLEGRO_BITMAP * background = al_create_bitmap(WIDTH, HEIGHT);
     ALLEGRO_EVENT event;
 
@@ -59,7 +62,8 @@ int main()
 
             case STATE_SCENE:
                 al_draw_bitmap(background, 0, 0, 0);
-                al_draw_text(font, al_map_rgb(0, 0, 0), WIDTH/2, 0, ALLEGRO_ALIGN_CENTRE, scenesArr[indeXcene].text);
+                /* al_draw_text(font, al_map_rgb(0, 0, 0), WIDTH/2, 0, ALLEGRO_ALIGN_CENTRE, scenesArr[indeXcene].text); */
+                textBox(WIDTH/2, HEIGHT/1.4, WIDTH/1.3, 20, scenesArr[indeXcene].text);
                 
                 if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode ==
                  ALLEGRO_KEY_RIGHT && scenesArr[indeXcene].visibility >= 1.0)
@@ -152,7 +156,7 @@ int main()
                 }
             } else if (stateCurrent == STATE_LEVEL && stagesArr[indeXtage].opened && stagesArr[indeXtage].closing) {
                 if (fadeState(&stagesArr[indeXtage].visibility, stagesArr[indeXtage].closing, FPS)) {
-                    printf("passa fase - %d\n", indeXcene);
+                    printf("passa fase - %d\n", indeXtage);
                     indeXtage++;
                     resizeBg(scenesArr[indeXcene].imgPath, background, WIDTH, HEIGHT);
                     stateCurrent = STATE_SCENE;
