@@ -6,7 +6,7 @@
 //variáveis globais suadas em outros arquivos
 int WIDTH = 750;
 int HEIGHT = 500;
-float FPS = 10;
+float FPS = 30;
 ALLEGRO_FONT *font;
 
 GAMESTATE stateCurrent = STATE_MENU;
@@ -52,7 +52,7 @@ int main() {
         switch (stateCurrent) {
             case STATE_MENU:
                 al_draw_bitmap(background, 0, 0, 0);
-                al_draw_text(font, al_map_rgb(255, 255, 255), 150, 0, ALLEGRO_ALIGN_CENTRE, "APERTE ENTER PRA INICIAR O JOGO");
+                al_draw_text(font, al_map_rgb(255, 255, 255), WIDTH/2, 30, ALLEGRO_ALIGN_CENTRE, "APERTE ENTER PRA INICIAR O JOGO");
 
                 if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
                     stateCurrent = STATE_SCENE;
@@ -62,7 +62,6 @@ int main() {
 
             case STATE_SCENE:
                 al_draw_bitmap(background, 0, 0, 0);
-                /* al_draw_text(font, al_map_rgb(0, 0, 0), WIDTH/2, 0, ALLEGRO_ALIGN_CENTRE, scenesArr[indeXcene].text); */
                 textBox(WIDTH/2, HEIGHT/1.4, WIDTH/1.3, 20, scenesArr[indeXcene].text);
                 
                 if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode ==
@@ -73,7 +72,7 @@ int main() {
             case STATE_LEVEL:
                     if(!(stagesArr[indeXtage].ingame || stagesArr[indeXtage].closing)) { // PRÓLOGO
                         al_draw_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgb(0, 0, 0), 0);
-                        al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, stagesArr[indeXtage].prologue);
+                        textBox(WIDTH/2, 100, WIDTH-WIDTH/5, 0, stagesArr[indeXtage].prologue);
 
                         if (!(stagesArr[indeXtage].opened) && stagesArr[indeXtage].visibility < 1 && redraw)
                             fadeState(&stagesArr[indeXtage].visibility, false, FPS);
@@ -110,7 +109,7 @@ int main() {
 
                     } else if (stagesArr[indeXtage].closing) { // EPÍLOGO
                         al_draw_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgb(0, 0, 0), 0);
-                        al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, stagesArr[indeXtage].epilogue);
+                        textBox(WIDTH/2, 100, WIDTH-WIDTH/5, 0, stagesArr[indeXtage].epilogue);
 
                         if (!(stagesArr[indeXtage].opened) && stagesArr[indeXtage].visibility < 1 && redraw)
                             fadeState(&stagesArr[indeXtage].visibility, false, FPS);
@@ -129,7 +128,7 @@ int main() {
                 break;
 
             case STATE_PAUSE:
-                al_draw_text(font, al_map_rgb(255, 255, 255), 250, 0, 0, "pausado");
+                al_draw_text(font, al_map_rgb(255, 255, 255), WIDTH/2, 0, ALLEGRO_ALIGN_CENTRE, "pausado");
 
                 if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                     stateCurrent = STATE_LEVEL;
@@ -150,6 +149,7 @@ int main() {
                     if (indeXcene == stagesArr[indeXtage].afterScene) {
                         stateCurrent = STATE_LEVEL;
                         resizeBg(stagesArr[indeXtage].mapPath, background, WIDTH, HEIGHT);
+                        font = al_load_ttf_font("../assets/Roboto.ttf", 30, 0);
                     } else {
                     resizeBg(scenesArr[indeXcene].imgPath, background, WIDTH, HEIGHT);
                     }
@@ -160,6 +160,7 @@ int main() {
                     indeXtage++;
                     resizeBg(scenesArr[indeXcene].imgPath, background, WIDTH, HEIGHT);
                     stateCurrent = STATE_SCENE;
+                    font = al_load_ttf_font("../assets/Roboto.ttf", 16, 0);
                 }
             } 
 
