@@ -5,7 +5,7 @@ extern int WIDTH;
 extern int HEIGHT;
 extern ALLEGRO_FONT *font;
 
-void resizeBg(char *path, ALLEGRO_BITMAP *background, int width, int height) {
+void resizeBg(char *path, ALLEGRO_BITMAP *background) {
     ALLEGRO_BITMAP *defaultBg = al_load_bitmap(path);
     ALLEGRO_BITMAP *prev_target = al_get_target_bitmap();
     if (!defaultBg) {
@@ -13,7 +13,7 @@ void resizeBg(char *path, ALLEGRO_BITMAP *background, int width, int height) {
     }
 
     al_set_target_bitmap(background);
-    al_draw_scaled_bitmap(defaultBg, 0, 0, al_get_bitmap_width(defaultBg), al_get_bitmap_height(defaultBg), 0, 0, width, height, 0);
+    al_draw_scaled_bitmap(defaultBg, 0, 0, al_get_bitmap_width(defaultBg), al_get_bitmap_height(defaultBg), 0, 0, WIDTH, HEIGHT, 0);
     al_set_target_bitmap(prev_target);
 
     al_destroy_bitmap(defaultBg);

@@ -9,8 +9,8 @@ void createScenes (Scene *arr) {
 
     int i = 0;
     while(fgets(line, sizeof(line), file)) {
-        arr[i].imgPath = malloc(25 * sizeof(char));
-        sprintf(arr[i].imgPath, "../assets/scene%d.jpg", i+1);
+        arr[i].imgPath = malloc(32 * sizeof(char));
+        sprintf(arr[i].imgPath, "../assets/scenes/scene%d.jpg", i+1);
 
         line[strcspn(line, "\n")] = 0;
         arr[i].text = strdup(line);

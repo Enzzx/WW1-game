@@ -10,7 +10,7 @@ float FPS = 30;
 ALLEGRO_FONT *font;
 
 GAMESTATE stateCurrent = STATE_MENU;
-Scene scenesArr[9];
+Scene scenesArr[11];
 Stage stagesArr[5];
 int indeXcene = 0;
 int indeXtage = 0;
@@ -39,7 +39,7 @@ int main() {
     createScenes(scenesArr);
     createLevels(stagesArr);
 
-    resizeBg("../assets/menu.jpg", background, WIDTH, HEIGHT);
+    resizeBg("../assets/scenes/menu.jpg", background);
 
     while (1) {
         al_wait_for_event(queue, &event);
@@ -56,7 +56,7 @@ int main() {
 
                 if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
                     stateCurrent = STATE_SCENE;
-                    resizeBg(scenesArr[indeXcene].imgPath, background, WIDTH, HEIGHT);
+                    resizeBg(scenesArr[indeXcene].imgPath, background);
                 }
                 break;
 
@@ -148,17 +148,17 @@ int main() {
                     indeXcene++;
                     if (indeXcene == stagesArr[indeXtage].afterScene) {
                         stateCurrent = STATE_LEVEL;
-                        resizeBg(stagesArr[indeXtage].mapPath, background, WIDTH, HEIGHT);
+                        resizeBg(stagesArr[indeXtage].mapPath, background);
                         font = al_load_ttf_font("../assets/Roboto.ttf", 30, 0);
                     } else {
-                    resizeBg(scenesArr[indeXcene].imgPath, background, WIDTH, HEIGHT);
+                    resizeBg(scenesArr[indeXcene].imgPath, background);
                     }
                 }
             } else if (stateCurrent == STATE_LEVEL && stagesArr[indeXtage].opened && stagesArr[indeXtage].closing) {
                 if (fadeState(&stagesArr[indeXtage].visibility, stagesArr[indeXtage].closing, FPS)) {
                     printf("passa fase - %d\n", indeXtage);
                     indeXtage++;
-                    resizeBg(scenesArr[indeXcene].imgPath, background, WIDTH, HEIGHT);
+                    resizeBg(scenesArr[indeXcene].imgPath, background);
                     stateCurrent = STATE_SCENE;
                     font = al_load_ttf_font("../assets/Roboto.ttf", 16, 0);
                 }
